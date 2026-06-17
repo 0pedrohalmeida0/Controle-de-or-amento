@@ -11,6 +11,26 @@ export function obterElemento(id) {
     return document.getElementById(id);
 }
 
+export function setCookie(name, value, days) {
+    const data = new Date();
+    data.setTime(data.getTime() + (days * 24 * 60 * 60 * 1000));
+    const expires = `expires=${data.toUTCString()}`;
+    document.cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}; ${expires}; path=/`;
+}
+
+export function getCookie(name) {
+    const cookieName = `${encodeURIComponent(name)}=`;
+    const cookies = document.cookie.split(';');
+
+    for (let cookie of cookies) {
+        cookie = cookie.trim();
+        if (cookie.startsWith(cookieName)) {
+            return decodeURIComponent(cookie.substring(cookieName.length));
+        }
+    }
+    return null;
+}
+
 /**
  * Extrai valor numérico de um texto formatado
  * @param {string} texto - Texto com formato "R$ 1.234,56"
