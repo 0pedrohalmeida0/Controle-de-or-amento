@@ -91,6 +91,10 @@ evitando a utilização de lógica diretamente no HTML.
 
 O sistema verifica se o valor informado é válido antes de processar o gasto, impedindo valores negativos, nulos ou inválidos.
 
+### Cookies
+
+Válidos por um ano : )
+
 ---
 
 ## Tecnologias Utilizadas
