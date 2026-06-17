@@ -1,18 +1,27 @@
-/**
- * Inicialização da aplicação de Controle de Orçamento
- */
+import { obterElemento, limparFormulario, validarValorPositivo, parseInputValor } from './utils.js';
+import { ControleOrcamento } from './classes.js';
+
+const controle = new ControleOrcamento();
 
 /**
- * Função para adicionar um novo gasto
- * Delega para a classe ControleOrcamento
+ * Função para adicionar um novo gasto (estilo funcional)
  */
-function addGastos() {
-    controleOrcamento.adicionarGasto();
+export function addGastos() {
+    const raw = obterElemento('valor').value;
+    const valor = parseInputValor(raw);
+
+    if (!validarValorPositivo(valor)) return;
+
+    const categoria = obterElemento('categoria').value;
+
+    controle.adicionarGasto(valor, categoria);
+
+    limparFormulario();
 }
 
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Aplicação de Controle de Orçamento iniciada');
-    
+
     // Adicionar evento ao botão de adicionar gasto
     const botaoAdicionar = document.querySelector('button[type="button"]');
     if (botaoAdicionar) {
@@ -29,3 +38,5 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+console.log('Aplicação com fins educaionais, desenvolvida por Pedro Henrqiue de Almeida, para o curso de Full Stack da EBAC.');

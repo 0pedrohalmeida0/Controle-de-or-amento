@@ -1,46 +1,43 @@
-class ControleOrcamento {
+import { extrairValorDoTexto, formatarValor, obterMapaCategorias, obterMapaLabels, obterElemento } from './utils.js';
+
+export class ControleOrcamento {
     constructor() {
         this.categorias = obterMapaCategorias();
         this.labels = obterMapaLabels();
     }
 
-    validarValor(valor) {
-        return validarValorPositivo(valor);
+    calcularNovoTotal(textoAtual, valor) {
+        const atual = extrairValorDoTexto(textoAtual);
+        return atual + valor;
     }
 
-    atualizarTotalCategoria(categoria, valor) {
+    formatarTextoCategoria(categoriaKey, total) {
+        return `${this.labels[categoriaKey]}: R$ ${formatarValor(total)}`;
+    }
+
+    formatarTextoTotal(total) {
+        return `Total: R$ ${formatarValor(total)}`;
+    }
+
+    atualizarTotalCategoriaDOM(categoria, valor) {
         const idElemento = this.categorias[categoria];
         const elementoCategoria = obterElemento(idElemento);
-        const totalAtual = extrairValorDoTexto(elementoCategoria.textContent);
-        const novoTotal = totalAtual + valor;
-
-        elementoCategoria.textContent = `${this.labels[categoria]}: R$ ${formatarValor(novoTotal)}`;
+        const novoTotal = this.calcularNovoTotal(elementoCategoria.textContent, valor);
+        elementoCategoria.textContent = this.formatarTextoCategoria(categoria, novoTotal);
+        return novoTotal;
     }
 
-    atualizarTotalGeral(valor) {
+    atualizarTotalGeralDOM(valor) {
         const elementoTotal = obterElemento('Total');
-        const totalAtual = extrairValorDoTexto(elementoTotal.textContent);
-        const novoTotal = totalAtual + valor;
-
-        elementoTotal.textContent = `Total: R$ ${formatarValor(novoTotal)}`;
+        const novoTotal = this.calcularNovoTotal(elementoTotal.textContent, valor);
+        elementoTotal.textContent = this.formatarTextoTotal(novoTotal);
+        return novoTotal;
     }
 
-    adicionarGasto() {
-        const valor = parseFloat(obterElemento('valor').value);
-
-        if (!this.validarValor(valor)) {
-            return;
-        }
-
-        const categoria = obterElemento('categoria').value;
-
-        this.atualizarTotalCategoria(categoria, valor);
-        this.atualizarTotalGeral(valor);
-
-        // Limpar input
-        limparFormulario();
+    adicionarGasto(valor, categoria) {
+        this.atualizarTotalCategoriaDOM(categoria, valor);
+        this.atualizarTotalGeralDOM(valor);
     }
 }
 
-// Instância global para uso nos scripts
-const controleOrcamento = new ControleOrcamento();
+// export default new ControleOrcamento();
